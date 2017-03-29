@@ -2,7 +2,13 @@ package app.firstapiaiapp.example.com.firstaiapiapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 //Importing text buttons and views from activity_main.xml
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,25 +28,45 @@ public class MainActivity extends AppCompatActivity implements AIListener{
     private Button listenButton;
     private TextView resultTextView;
 
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+
     private AIService aiService;
 
     @Override
-
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+             switch (requestCode){
+                       case REQUEST_RECORD_AUDIO_PERMISSION:
+                               if (grantResults.length > 0
+                                              && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                                       // permission was granted, yay!
+                                          }
+                               else {
+                                       // exit app
+                                             finish();
+                               }
+             }
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listenButton = (Button) findViewById(R.id.listenButton);
         resultTextView = (TextView) findViewById(R.id.resultTextView);
 
-        final AIConfiguration config = new AIConfiguration("209dcc92a8f5400da3f6d76b8f90d758",
-                AIConfiguration.SupportedLanguages.English,
-                AIConfiguration.RecognitionEngine.System);
+        final AIConfiguration config = new AIConfiguration("a7527eff0fc04be69394e8ae2e44f87b", AIConfiguration.SupportedLanguages.English, AIConfiguration.RecognitionEngine.System);
 
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_RECORD_AUDIO_PERMISSION);
+        }
     }
+
 
     public void listenButtonOnClick(final View view) {
         aiService.startListening();
@@ -57,10 +83,12 @@ public class MainActivity extends AppCompatActivity implements AIListener{
             }
         }
 
+
         // Show results in TextView.
-        resultTextView.setText("Query:" + result.getResolvedQuery() +
-                "\nAction: " + result.getAction() +
-                "\nParameters: " + parameterString);
+        resultTextView.setText("Question:" + result.getResolvedQuery() +
+                " source\n" + result.getFulfillment().getSpeech());
+
+
     }
 
     @Override

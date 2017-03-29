@@ -10,11 +10,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="app.firstapiaiapp.example.com.firstaiapiapp.MainActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/resultTextView"
         android:layout_below="@+id/listenButton"
         android:layout_centerHorizontal="true"
@@ -25,6 +23,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listenButton"
+        android:layout_marginTop="85dp"
+        android:onClick="listenButtonOnClick"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Stop listening"
+        android:layout_toRightOf="@id/listenButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stop_listen_button"
         android:layout_marginTop="85dp"
         android:onClick="listenButtonOnClick"
         android:layout_alignParentTop="true"
