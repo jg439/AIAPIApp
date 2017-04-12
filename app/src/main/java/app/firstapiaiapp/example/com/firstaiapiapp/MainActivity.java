@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements AIListener{
 
 
         // Show results in TextView.
-        resultTextView.setText("Question:" + result.getResolvedQuery() +
-                " source\n" + result.getFulfillment().getSpeech());
+        resultTextView.setText("Question:\n" + result.getResolvedQuery() +"\n"+
+                "Response:\n" + result.getFulfillment().getSpeech());
 
 
     }
